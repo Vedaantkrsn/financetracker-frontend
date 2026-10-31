@@ -7,6 +7,7 @@ import TransactionsPage from './pages/TransactionsPage';
 import AccountsPage from './pages/AccountsPage';
 import CategoriesPage from './pages/CategoriesPage';
 import BudgetsPage from './pages/BudgetsPage';
+import RecurringPage from './pages/RecurringPage';
 import api from './api/axios';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
   const [error, setError] = useState('');
   const [filters, setFilters] = useState({});
   const [budgets, setBudgets] = useState([]);
+  const [recurring, setRecurring] = useState([]);
 
   const fetchAccounts = () => {
     api.get('accounts/')
@@ -57,6 +59,12 @@ function App() {
       .catch(() => setError('Failed to load budgets'));
   };
 
+  const fetchRecurring = () => {
+    api.get('recurring/')
+      .then((response) => setRecurring(response.data))
+      .catch(() => setError('Failed to load recurring items'));
+  };
+
 
   const fetchAll = () => {
     setLoading(true);
@@ -66,13 +74,15 @@ function App() {
       api.get('categories/'),
       api.get('transactions/', { params: filters }),
       api.get('budgets/'),
+      api.get('recurring/'),
     ])
-      .then(([accountsRes, transactionsRes, categoriesRes, filteredTransactionsRes, budgetsRes]) => {
+      .then(([accountsRes, transactionsRes, categoriesRes, filteredTransactionsRes, budgetsRes, recurringRes]) => {
         setAccounts(accountsRes.data);
         setTransactions(transactionsRes.data);
         setCategories(categoriesRes.data);
         setFilteredTransactions(filteredTransactionsRes.data);
         setBudgets(budgetsRes.data);
+        setRecurring(recurringRes.data);
         setLoading(false);
       })
       .catch(() => {
@@ -88,6 +98,7 @@ function App() {
     setTransactions([]);
     setCategories([]);
     setFilteredTransactions([]);
+    setRecurring([]);
     setIsLoggedIn(false);
   };
 
@@ -95,6 +106,11 @@ function App() {
     fetchAccounts();
     fetchTransactions();
     fetchFilteredTransactions(filters);
+  };
+  
+  const handlePosted = () => {
+    fetchRecurring();
+    handleTransactionAdded();
   };
 
   const handleFilterChange = (newFilters) => {
@@ -150,6 +166,10 @@ function App() {
             />
             <Route path="/budgets" element={
               <BudgetsPage categories={categories} budgets={budgets} onBudgetChanged={fetchBudgets} />} 
+            />
+            <Route path="/recurring" element={
+              <RecurringPage accounts={accounts} categories={categories} recurring={recurring}
+                  onChanged={fetchRecurring} onPosted={handlePosted} />}
             />
           </Routes>
         </div>

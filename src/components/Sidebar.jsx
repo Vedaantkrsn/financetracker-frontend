@@ -13,6 +13,7 @@ function Sidebar({onLogout}) {
             <NavLink to="/accounts" style={linkStyle}>Accounts</NavLink>
             <NavLink to="/categories" style={linkStyle}>Categories</NavLink>
             <NavLink to="/budgets" style={linkStyle}>Budget</NavLink>
+            <NavLink to="/recurring" style={linkStyle}>Recurring</NavLink>
             <button onClick={onLogout}>Logout</button>
         </nav>
     );
