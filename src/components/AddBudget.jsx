@@ -74,39 +74,48 @@ function AddBudget({categories, onBudgetAdded, editingBudget, onCancelEdit}) {
       onBudgetAdded(startDate);
     };
     return (
-    <form onSubmit={handleSubmit}>
-      <h3>{isEditing ? 'Edit Budget' : 'Add Budget'}</h3>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <form className="budget-form" onSubmit={handleSubmit}>
+      <div className="budget-form-heading"><div><p className="eyebrow">{isEditing ? 'ADJUST YOUR PLAN' : 'MAKE A SPENDING PLAN'}</p><h2>{isEditing ? 'Edit budget' : 'New budget'}</h2></div><span className="budget-form-orb" aria-hidden="true">◷</span></div>
+      {error && <p className="budget-error">{error}</p>}
 
+      <div className="budget-form-fields">
+      <label>Category
       <select value={category} onChange={(e) => setCategory(e.target.value)} required disabled={isEditing}>
         <option value="">Select category</option>
         {expenseCategories.map((c) => (
           <option key={c.id} value={c.id}>{c.name}</option>
         ))}
       </select>
+      </label>
 
+      <label>Period
       <select value={periodType} onChange={(e) => setPeriodType(e.target.value)}  required disabled={isEditing}>
         <option value="monthly">Monthly</option>
         <option value="weekly">Weekly</option>
       </select>
+      </label>
 
+      <label>Budget amount
       <input
         type="number" step="0.01" placeholder="Amount"
         value={amount} onChange={(e) => setAmount(e.target.value)} required
       />
-
-      <label>Start: <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required /></label>
-      <label>End: <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required /></label>
-
-      <label>
-        <input type="checkbox" checked={rolloverEnabled} onChange={(e) => setRolloverEnabled(e.target.checked)} />
-        Enable rollover
       </label>
 
-      <button type="submit">{isEditing ? 'Save Changes' : 'Add Budget'}</button>
+      <label>Start date <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required /></label>
+      <label>End date <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required /></label>
+
+      <label className="rollover-toggle">
+        <input type="checkbox" checked={rolloverEnabled} onChange={(e) => setRolloverEnabled(e.target.checked)} />
+        <span><strong>Enable rollover</strong><small>Carry unused budget into the next period</small></span>
+      </label>
+      </div>
+
+      <div className="budget-form-actions"><button className="primary-action" type="submit">{isEditing ? 'Save changes' : 'Add budget'} <span aria-hidden="true">↗</span></button>
       {isEditing && (
-        <button type="button" onClick={onCancelEdit}>Cancel</button>
+        <button className="secondary-action" type="button" onClick={onCancelEdit}>Cancel</button>
       )}
+      </div>
     </form>
   );
 }

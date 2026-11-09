@@ -64,59 +64,58 @@ function RecurringList({ items, accounts, onEdit, onChanged, onPosted }) {
 
   const dueBadge = (item) => {
     const d = daysUntil(item.next_due_date);
-    if (d < 0) return <strong style={{ color: 'red' }}> Overdue by {-d}d</strong>;
-    if (d === 0) return <strong style={{ color: 'orange' }}> Due today</strong>;
-    if (d <= 30) return <span style={{ color: 'orange' }}> Due in {d}d</span>;
+    if (d < 0) return <strong className="due-badge due-badge--overdue">Overdue by {-d}d</strong>;
+    if (d === 0) return <strong className="due-badge due-badge--today">Due today</strong>;
+    if (d <= 30) return <span className="due-badge due-badge--soon">Due in {d}d</span>;
     return null;
   };
 
   const renderItem = (item) => {
     const busy = busyId === item.id;
     return (
-      <li key={item.id} style={{ marginBottom: '12px' }}>
-        <div>
-          <strong>{item.name}</strong> — {item.transaction_type} ₹{item.amount} {item.frequency} · {getAccountName(item.account)}
-        </div>
-        <div>
-          Next: {fmt(item.next_due_date)}{item.is_active && dueBadge(item)}
-          {' '}· ₹{item.monthly_cost}/mo · ₹{item.yearly_cost}/yr ·{' '}
-          {item.transaction_type === 'income' ? 'received' : 'paid'} so far ₹{item.lifetime_total}
-        </div>
+      <li className={`recurring-card ${item.is_active ? '' : 'recurring-card--paused'}`} key={item.id}>
+        <div className="recurring-card-top"><span className={`recurring-item-orb recurring-item-orb--${item.transaction_type}`} aria-hidden="true">{item.transaction_type === 'income' ? '↙' : '↗'}</span><span className={`recurring-item-status ${item.is_active ? '' : 'recurring-item-status--paused'}`}>{item.is_active ? 'Active' : 'Paused'}</span></div>
+        <div className="recurring-item-title"><div><h3>{item.name}</h3><p>{item.frequency} · {getAccountName(item.account)}</p></div>{item.is_active && dueBadge(item)}</div>
+        <strong className={`recurring-amount recurring-amount--${item.transaction_type}`}>{item.transaction_type === 'income' ? '+' : '−'}₹{item.amount}<small> / {item.frequency === 'monthly' ? 'month' : item.frequency === 'weekly' ? 'week' : 'year'}</small></strong>
+        <div className="recurring-next"><span>Next {item.transaction_type === 'income' ? 'deposit' : 'payment'}</span><strong>{fmt(item.next_due_date)}</strong></div>
+        <div className="recurring-metrics"><span>₹{item.monthly_cost}<small>/mo</small></span><span>₹{item.yearly_cost}<small>/yr</small></span><span>₹{item.lifetime_total}<small> {item.transaction_type === 'income' ? 'received' : 'paid'}</small></span></div>
         {item.is_active && (
-          <>
+          <div className="recurring-post-controls">
             <input
-              type="number" step="0.01" placeholder={`Amount (${item.amount})`}
+              type="number" step="0.01" aria-label={`Override amount for ${item.name}`} placeholder={`Amount (${item.amount})`}
+              className="recurring-override"
               value={overrides[item.id] || ''}
               onChange={(e) => setOverrides({ ...overrides, [item.id]: e.target.value })}
             />
-            <button type="button" disabled={busy} onClick={() => handlePost(item)}>Post</button>
-            <button type="button" disabled={busy} onClick={() => handleSkip(item)}>Skip</button>
-          </>
+            <button className="recurring-action recurring-action--post" type="button" disabled={busy} onClick={() => handlePost(item)}>Post now</button>
+            <button className="recurring-action" type="button" disabled={busy} onClick={() => handleSkip(item)}>Skip</button>
+          </div>
         )}
-        <button type="button" disabled={busy} onClick={() => handleToggle(item)}>
+        <div className="recurring-card-actions"><button className="recurring-action" type="button" disabled={busy} onClick={() => handleToggle(item)}>
           {item.is_active ? 'Pause' : 'Resume'}
         </button>
-        <button type="button" onClick={() => onEdit(item)}>Edit</button>
-        <button type="button" disabled={busy} onClick={() => handleDelete(item)}>Delete</button>
+        <button className="recurring-action" type="button" onClick={() => onEdit(item)}>Edit</button>
+        <button className="recurring-action recurring-action--delete" type="button" disabled={busy} onClick={() => handleDelete(item)}>Delete</button></div>
       </li>
     );
   };
 
   return (
-    <div>
-      <h3>Recurring items</h3>
-      <p>
-        Per month: ₹{monthlyTotal('expense').toFixed(2)} out · ₹{monthlyTotal('income').toFixed(2)} in
-      </p>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {active.length === 0 ? <p>No active recurring items.</p> : <ul>{active.map(renderItem)}</ul>}
+    <section className="recurring-list-panel">
+      <div className="recurring-summary">
+        <article className="recurring-summary-card"><span className="recurring-summary-icon recurring-summary-icon--expense">↗</span><div><small>Monthly outflow</small><strong>₹{monthlyTotal('expense').toFixed(2)}</strong></div></article>
+        <article className="recurring-summary-card"><span className="recurring-summary-icon recurring-summary-icon--income">↙</span><div><small>Monthly inflow</small><strong>₹{monthlyTotal('income').toFixed(2)}</strong></div></article>
+      </div>
+      <div className="recurring-list-heading"><div><p className="eyebrow">REPEATING ACTIVITY</p><h2>Recurring items</h2></div><span className="count-pill">{active.length} active</span></div>
+      {error && <p className="recurring-error">{error}</p>}
+      {active.length === 0 ? <p className="recurring-empty">No active recurring items.</p> : <ul className="recurring-grid">{active.map(renderItem)}</ul>}
       {paused.length > 0 && (
-        <details>
-          <summary>Paused or finished ({paused.length})</summary>
-          <ul>{paused.map(renderItem)}</ul>
+        <details className="paused-recurring">
+          <summary>Paused items <span>{paused.length}</span></summary>
+          <ul className="recurring-grid">{paused.map(renderItem)}</ul>
         </details>
       )}
-    </div>
+    </section>
   );
 }
 

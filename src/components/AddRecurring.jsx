@@ -60,41 +60,51 @@ function AddRecurring({accounts, categories, editingItem, onSaved, onCancelEdit}
     );
 
     return (
-        <form onSubmit={handleSubmit}>
-        <h3>{isEditing ? 'Edit Recurring' : 'Add Recurring'}</h3>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <form className="recurring-form" onSubmit={handleSubmit}>
+        <div className="recurring-form-heading"><div><p className="eyebrow">{isEditing ? 'UPDATE A ROUTINE' : 'ADD A ROUTINE'}</p><h2>{isEditing ? 'Edit recurring item' : 'New recurring item'}</h2></div><span className="recurring-form-orb" aria-hidden="true">⟳</span></div>
+        {error && <p className="recurring-error">{error}</p>}
 
-        <input placeholder="Name (e.g. Rent, Netflix)" value={form.name} onChange={set('name')} required />
+        <div className="recurring-form-fields">
+        <label>Name<input placeholder="e.g. Rent, Netflix" value={form.name} onChange={set('name')} required /></label>
 
+        <label>Type
         <select value={form.transaction_type}
             onChange={(e) => setForm({ ...form, transaction_type: e.target.value, category: '' })}>
             <option value="expense">Expense</option>
             <option value="income">Income</option>
         </select>
+        </label>
 
+        <label>Account
         <select value={form.account} onChange={set('account')} required>
             <option value="">Select account</option>
             {accountOptions.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
         </select>
+        </label>
 
+        <label>Category
         <select value={form.category} onChange={set('category')}>
             <option value="">No category</option>
             {categoryOptions.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
         </select>
+        </label>
 
-        <input type="number" step="0.01" placeholder="Amount" value={form.amount} onChange={set('amount')} required />
+        <label>Amount<input type="number" step="0.01" placeholder="Amount" value={form.amount} onChange={set('amount')} required /></label>
 
+        <label>Frequency
         <select value={form.frequency} onChange={set('frequency')}>
             <option value="weekly">Weekly</option>
             <option value="monthly">Monthly</option>
             <option value="yearly">Yearly</option>
         </select>
+        </label>
 
-        <label>Start: <input type="date" value={form.start_date} onChange={set('start_date')} required disabled={isEditing} /></label>
-        <label>End (optional): <input type="date" value={form.end_date} onChange={set('end_date')} /></label>
+        <label>Start date<input type="date" value={form.start_date} onChange={set('start_date')} required disabled={isEditing} /></label>
+        <label>End date <span>(optional)</span><input type="date" value={form.end_date} onChange={set('end_date')} /></label>
+        </div>
 
-        <button type="submit">{isEditing ? 'Save Changes' : 'Add Recurring'}</button>
-        {isEditing && <button type="button" onClick={onCancelEdit}>Cancel</button>}
+        <div className="recurring-form-actions"><button className="primary-action" type="submit">{isEditing ? 'Save changes' : 'Add recurring item'} <span aria-hidden="true">↗</span></button>
+        {isEditing && <button className="secondary-action" type="button" onClick={onCancelEdit}>Cancel</button>}</div>
         </form>
     );
 }

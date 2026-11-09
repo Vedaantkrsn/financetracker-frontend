@@ -25,8 +25,8 @@ function BudgetsPage({ categories, budgets, onBudgetChanged }) {
   };
 
   return (
-    <div>
-      <h2>Budgets</h2>
+    <main className="budgets-page">
+      <header className="budgets-header"><div><p className="eyebrow">PLAN YOUR SPENDING</p><h1>Budgets</h1><p className="budgets-subtitle">Set a limit, track the pace, and adjust as life moves.</p></div><span className="budgets-header-orb" aria-hidden="true"><i /></span></header>
 
       <AddBudget
         categories={categories}
@@ -42,7 +42,7 @@ function BudgetsPage({ categories, budgets, onBudgetChanged }) {
         onBudgetChanged={onBudgetChanged}
         onEdit={setEditingBudget}
       />
-    </div>
+    </main>
   );
 }
 

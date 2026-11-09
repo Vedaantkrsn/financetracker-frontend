@@ -37,11 +37,14 @@ function AddAccount({ onAccountAdded }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h3>Add Account</h3>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <form className="account-form" onSubmit={handleSubmit}>
+      <div className="account-form-heading"><div><p className="eyebrow">ADD A PLACE TO TRACK</p><h2>New account</h2></div><span className="account-form-orb" aria-hidden="true">＋</span></div>
+      {error && <p className="account-error">{error}</p>}
+      <div className="account-fields">
       <div>
+        <label htmlFor="account-name">Account name</label>
         <input
+          id="account-name"
           type="text"
           placeholder="Account name"
           value={name}
@@ -50,14 +53,17 @@ function AddAccount({ onAccountAdded }) {
         />
       </div>
       <div>
-        <select value={accountType} onChange={(e) => setAccountType(e.target.value)}>
+        <label htmlFor="account-type">Account type</label>
+        <select id="account-type" value={accountType} onChange={(e) => setAccountType(e.target.value)}>
           {ACCOUNT_TYPES.map((t) => (
             <option key={t.value} value={t.value}>{t.label}</option>
           ))}
         </select>
       </div>
       <div>
+        <label htmlFor="account-institution">Institution <span>(optional)</span></label>
         <input
+          id="account-institution"
           type="text"
           placeholder="Institution (optional)"
           value={institution}
@@ -65,7 +71,9 @@ function AddAccount({ onAccountAdded }) {
         />
       </div>
       <div>
+        <label htmlFor="account-balance">Starting balance</label>
         <input
+          id="account-balance"
           type="number"
           step="0.01"
           placeholder="Initial balance"
@@ -73,7 +81,8 @@ function AddAccount({ onAccountAdded }) {
           onChange={(e) => setInitialBalance(e.target.value)}
         />
       </div>
-      <button type="submit">Add Account</button>
+      </div>
+      <button className="primary-action account-submit" type="submit">Add account <span aria-hidden="true">↗</span></button>
     </form>
   );
 }

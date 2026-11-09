@@ -76,12 +76,15 @@ function AddTransaction({ accounts, categories, editingTransaction, onTransactio
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h3>{isEditing ? 'Edit Transaction' : 'Add Transaction'}</h3>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <form className="transaction-form" onSubmit={handleSubmit}>
+      <div className="transaction-form-heading"><div><p className="eyebrow">{isEditing ? 'UPDATE ENTRY' : 'NEW ENTRY'}</p><h2>{isEditing ? 'Edit transaction' : 'Add a transaction'}</h2></div><span className="form-orb" aria-hidden="true">＋</span></div>
+      {error && <p className="transaction-error">{error}</p>}
 
-      <div>
+      <div className="transaction-fields">
+      <div className="transaction-type-field">
+        <label htmlFor="transaction-type">Type</label>
         <select
+          id="transaction-type"
           value={transactionType}
           onChange={(e) => { setTransactionType(e.target.value); setCategory(''); }}
           disabled={isEditing && transactionType === 'transfer'}
@@ -93,7 +96,8 @@ function AddTransaction({ accounts, categories, editingTransaction, onTransactio
       </div>
 
       <div>
-        <select value={account} onChange={(e) => setAccount(e.target.value)} required>
+        <label htmlFor="transaction-account">Account</label>
+        <select id="transaction-account" value={account} onChange={(e) => setAccount(e.target.value)} required>
           <option value="">Select account</option>
           {accounts.map((acc) => (
             <option key={acc.id} value={acc.id}>{acc.name}</option>
@@ -103,7 +107,8 @@ function AddTransaction({ accounts, categories, editingTransaction, onTransactio
 
       {transactionType === 'transfer' && !isEditing && (
         <div>
-          <select value={toAccount} onChange={(e) => setToAccount(e.target.value)} required>
+          <label htmlFor="transfer-account">Transfer to</label>
+          <select id="transfer-account" value={toAccount} onChange={(e) => setToAccount(e.target.value)} required>
             <option value="">Transfer to...</option>
             {accounts.filter((acc) => acc.id !== Number(account)).map((acc) => (
               <option key={acc.id} value={acc.id}>{acc.name}</option>
@@ -114,7 +119,8 @@ function AddTransaction({ accounts, categories, editingTransaction, onTransactio
 
       {transactionType !== 'transfer' && (
         <div>
-          <select value={category} onChange={(e) => setCategory(e.target.value)}>
+          <label htmlFor="transaction-category">Category</label>
+          <select id="transaction-category" value={category} onChange={(e) => setCategory(e.target.value)}>
             <option value="">No category</option>
             {relevantCategories.map((cat) => (
               <option key={cat.id} value={cat.id}>{cat.name}</option>
@@ -124,7 +130,9 @@ function AddTransaction({ accounts, categories, editingTransaction, onTransactio
       )}
 
       <div>
+        <label htmlFor="transaction-amount">Amount</label>
         <input
+          id="transaction-amount"
           type="number"
           step="0.01"
           placeholder="Amount"
@@ -135,7 +143,9 @@ function AddTransaction({ accounts, categories, editingTransaction, onTransactio
       </div>
 
       <div>
+        <label htmlFor="transaction-date">Date</label>
         <input
+          id="transaction-date"
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
@@ -144,16 +154,21 @@ function AddTransaction({ accounts, categories, editingTransaction, onTransactio
       </div>
 
       <div>
+        <label htmlFor="transaction-description">Description</label>
         <input
+          id="transaction-description"
           type="text"
           placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
       </div>
+      </div>
 
-      <button type="submit">{isEditing ? 'Save Changes' : 'Add Transaction'}</button>
-      {isEditing && <button type="button" onClick={onCancelEdit}>Cancel</button>}
+      <div className="transaction-form-actions">
+        <button className="primary-action" type="submit">{isEditing ? 'Save Changes' : 'Add Transaction'} <span aria-hidden="true">↗</span></button>
+        {isEditing && <button className="secondary-action" type="button" onClick={onCancelEdit}>Cancel</button>}
+      </div>
     </form>
   );
 }

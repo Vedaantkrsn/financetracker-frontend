@@ -11,8 +11,8 @@ function RecurringPage({ accounts, categories, recurring, onChanged, onPosted })
   };
 
   return (
-    <div>
-      <h2>Recurring</h2>
+    <main className="recurring-page">
+      <header className="recurring-header"><div><p className="eyebrow">THE RHYTHM OF YOUR MONEY</p><h1>Recurring</h1><p className="recurring-subtitle">Stay ahead of the payments and deposits that repeat.</p></div><span className="recurring-header-orb" aria-hidden="true">⟳</span></header>
       <AddRecurring
         accounts={accounts}
         categories={categories}
@@ -27,7 +27,7 @@ function RecurringPage({ accounts, categories, recurring, onChanged, onPosted })
         onChanged={onChanged}
         onPosted={onPosted}
       />
-    </div>
+    </main>
   );
 }
 

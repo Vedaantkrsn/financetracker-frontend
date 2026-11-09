@@ -8,6 +8,7 @@ import AccountsPage from './pages/AccountsPage';
 import CategoriesPage from './pages/CategoriesPage';
 import BudgetsPage from './pages/BudgetsPage';
 import RecurringPage from './pages/RecurringPage';
+import ReportsPage from './pages/ReportsPage';
 import api from './api/axios';
 
 function App() {
@@ -107,7 +108,7 @@ function App() {
     fetchTransactions();
     fetchFilteredTransactions(filters);
   };
-  
+
   const handlePosted = () => {
     fetchRecurring();
     handleTransactionAdded();
@@ -130,11 +131,12 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div style={{ display: 'flex' }}>
+      <div className="app-shell">
         <Sidebar onLogout={handleLogout} />
-        <div style={{ flex: 1, padding: '16px' }}>
+        <div className="app-content">
           <Routes>
-            <Route path="/" element={<Dashboard accounts={accounts} transactions={transactions} />} />
+            <Route path="/" element={<Dashboard accounts={accounts}
+              transactions={transactions} recurring={recurring} budgets={budgets} />} />
             <Route
               path="/transactions"
               element={
@@ -161,15 +163,18 @@ function App() {
             />
             <Route
               path="/categories"
-              element={<CategoriesPage categories={categories} onCategoryAdded={fetchCategories} 
-              onCategoryChanged={fetchCategories} />}
+              element={<CategoriesPage categories={categories} onCategoryAdded={fetchCategories}
+                onCategoryChanged={fetchCategories} />}
             />
             <Route path="/budgets" element={
-              <BudgetsPage categories={categories} budgets={budgets} onBudgetChanged={fetchBudgets} />} 
+              <BudgetsPage categories={categories} budgets={budgets} onBudgetChanged={fetchBudgets} />}
             />
             <Route path="/recurring" element={
               <RecurringPage accounts={accounts} categories={categories} recurring={recurring}
-                  onChanged={fetchRecurring} onPosted={handlePosted} />}
+                onChanged={fetchRecurring} onPosted={handlePosted} />}
+            />
+            <Route path="/reports" element={
+              <ReportsPage accounts={accounts} categories={categories} />}
             />
           </Routes>
         </div>

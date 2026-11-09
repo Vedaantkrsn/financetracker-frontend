@@ -22,11 +22,14 @@ function AddCategory({ onCategoryAdded }) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h3>Add Category</h3>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+        <form className="category-form" onSubmit={handleSubmit}>
+            <div className="category-form-heading"><div><p className="eyebrow">CREATE A LABEL</p><h2>New category</h2></div><span className="category-form-orb" aria-hidden="true">＋</span></div>
+            {error && <p className="category-error">{error}</p>}
+            <div className="category-form-fields">
             <div>
+                <label htmlFor="category-name">Category name</label>
                 <input
+                id="category-name"
                 type="text"
                 placeholder="Category name"
                 value={name}
@@ -35,12 +38,14 @@ function AddCategory({ onCategoryAdded }) {
                 />
             </div>
             <div>
-                <select value={categoryType} onChange={(e) => setCategoryType(e.target.value)}>
+                <label htmlFor="category-type">Category type</label>
+                <select id="category-type" value={categoryType} onChange={(e) => setCategoryType(e.target.value)}>
                 <option value="expense">Expense</option>
                 <option value="income">Income</option>
                 </select>
             </div>
-            <button type="submit">Add Category</button>
+            </div>
+            <button className="primary-action category-submit" type="submit">Add category <span aria-hidden="true">↗</span></button>
         </form>
     );
 }
