@@ -316,9 +316,21 @@
     padding: 0 7px 12px;
   }
 
-  .sidebar-label,
-  .sidebar-bottom {
+  .sidebar-label {
     display: none;
+  }
+
+  .sidebar-bottom {
+    display: block;
+    margin-top: 8px;
+  }
+
+  .sidebar-note {
+    display: none;
+  }
+
+  .logout-button {
+    width: auto;
   }
 
   .sidebar-links {
