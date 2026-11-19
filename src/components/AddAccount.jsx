@@ -7,6 +7,9 @@ const ACCOUNT_TYPES = [
   { value: 'wallet', label: 'Digital Wallet' },
   { value: 'credit_card', label: 'Credit Card' },
   { value: 'investment', label: 'Investment' },
+  { value: 'savings_account', label: 'Savings Account' },
+  { value: 'loan', label: 'Loan' },
+  { value: 'other', label: 'Other' },
 ];
 
 function AddAccount({ onAccountAdded }) {
@@ -41,46 +44,46 @@ function AddAccount({ onAccountAdded }) {
       <div className="account-form-heading"><div><p className="eyebrow">ADD A PLACE TO TRACK</p><h2>New account</h2></div><span className="account-form-orb" aria-hidden="true">＋</span></div>
       {error && <p className="account-error">{error}</p>}
       <div className="account-fields">
-      <div>
-        <label htmlFor="account-name">Account name</label>
-        <input
-          id="account-name"
-          type="text"
-          placeholder="Account name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="account-type">Account type</label>
-        <select id="account-type" value={accountType} onChange={(e) => setAccountType(e.target.value)}>
-          {ACCOUNT_TYPES.map((t) => (
-            <option key={t.value} value={t.value}>{t.label}</option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label htmlFor="account-institution">Institution <span>(optional)</span></label>
-        <input
-          id="account-institution"
-          type="text"
-          placeholder="Institution (optional)"
-          value={institution}
-          onChange={(e) => setInstitution(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="account-balance">Starting balance</label>
-        <input
-          id="account-balance"
-          type="number"
-          step="0.01"
-          placeholder="Initial balance"
-          value={initialBalance}
-          onChange={(e) => setInitialBalance(e.target.value)}
-        />
-      </div>
+        <div>
+          <label htmlFor="account-name">Account name</label>
+          <input
+            id="account-name"
+            type="text"
+            placeholder="Account name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="account-type">Account type</label>
+          <select id="account-type" value={accountType} onChange={(e) => setAccountType(e.target.value)}>
+            {ACCOUNT_TYPES.map((t) => (
+              <option key={t.value} value={t.value}>{t.label}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="account-institution">Institution <span>(optional)</span></label>
+          <input
+            id="account-institution"
+            type="text"
+            placeholder="Institution (optional)"
+            value={institution}
+            onChange={(e) => setInstitution(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="account-balance">Starting balance</label>
+          <input
+            id="account-balance"
+            type="number"
+            step="0.01"
+            placeholder="Initial balance"
+            value={initialBalance}
+            onChange={(e) => setInitialBalance(e.target.value)}
+          />
+        </div>
       </div>
       <button className="primary-action account-submit" type="submit">Add account <span aria-hidden="true">↗</span></button>
     </form>
